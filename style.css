@@ -1,0 +1,154 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #e1e1e1;
+}
+
+#clock {
+    display: flex;
+    padding: 5px;
+    gap: 8px;
+
+    width: fit-content;
+    height: fit-content;
+}
+
+.number, .separator {
+    border: 5px groove transparent;
+    padding: 15px;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.number {
+    border-color: #99999988;
+    background-color: #dddddd;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 2px white,
+        inset 0 0 3px 0 white,
+        inset 0 0 1px 15px black;
+}
+
+.separator {
+    font-size: 163px;
+    width: 20px;
+    height: 165px;
+    line-height: 160px;
+    font-weight: 400;
+    font-family: 'Nova Mono';
+}
+.separator .value {
+    display: block;
+    transform: scaleX(0.5);
+    margin-left: -25px;
+    color: black;
+}
+
+.display {
+    display: flex;
+    width: 90px;
+    height: 157.5px;
+    padding-top: 7.5px;
+}
+
+.segment {
+    --size: 15px;
+    --ratio: 5;
+    --border: 1px;
+    background: transparent;
+    width: var(--size);
+    aspect-ratio: 1 / var(--ratio);
+    position: fixed;
+}
+.segment::before {
+    --inner-size: calc(var(--size) - calc(var(--border) * 2));
+    background-color: #333;
+    content: '';
+    position: absolute;
+    top: calc(var(--border) * 1.5);
+    left: var(--border);
+    width: var(--inner-size);
+    height: calc(calc(var(--size) * var(--ratio)) - calc(var(--border) * 3));
+
+    --clip: calc(var(--inner-size) / 2);
+    --clip-y-end: calc(calc(calc(var(--size) * var(--ratio)) - calc(var(--border) * 3)) - var(--clip));
+    clip-path: polygon(
+        50% 0%,
+        50% 0%,
+        100% var(--clip),
+        100% var(--clip-y-end),
+        50% 100%,
+        50% 100%,
+        0% var(--clip-y-end),
+        0% var(--clip)
+    );
+    translate: -15px;
+    transition: translate 200ms ease, transform 200ms ease;
+}
+
+.segment[bottom-left] {
+    margin-top: calc(var(--size) * var(--ratio));
+}
+.segment[top-right] {
+    margin-left: calc(var(--size) * var(--ratio));
+    transform: rotateZ(180deg);
+}
+.segment[bottom-right] {
+    margin-top: calc(var(--size) * var(--ratio));
+    margin-left: calc(var(--size) * var(--ratio));
+    transform: rotateZ(180deg);
+}
+.segment[top] {
+    transform: rotateZ(90deg);
+    margin-top: calc(calc(var(--size) * calc(var(--ratio) / 2)) * -1);
+    margin-left: calc(var(--size) * calc(var(--ratio) / 2));
+}
+.segment[middle] {
+    transform: rotateZ(90deg);
+    margin-top: calc(var(--size) * calc(var(--ratio) / 2));
+    margin-left: calc(var(--size) * calc(var(--ratio) / 2));
+
+    background-color: #ccc;
+    --clip: calc(var(--size) / 2);
+    --clip-y-end: calc(calc(var(--size) * var(--ratio)) - var(--clip));
+    clip-path: polygon(
+        50% 0%,
+        50% 0%,
+        100% var(--clip),
+        100% var(--clip-y-end),
+        50% 100%,
+        50% 100%,
+        0% var(--clip-y-end),
+        0% var(--clip)
+    );
+}
+.segment[bottom] {
+    transform: rotateZ(270deg);
+    margin-top: calc(calc(var(--size) * calc(var(--ratio) / 2)) * 3);
+    margin-left: calc(var(--size) * calc(var(--ratio) / 2));
+}
+
+.segment[middle]::before {
+    translate: 0px;
+    transform: rotateY(90deg);
+}
+.segment[on]::before {
+    background-color: black;
+    translate: 0px;
+}
+.segment[on][middle]::before {
+    transform: rotateY(0deg);
+}
